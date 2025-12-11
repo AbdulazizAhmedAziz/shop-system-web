@@ -1,9 +1,8 @@
 \documentclass[12pt,a4paper]{report}
 \usepackage[utf8]{inputenc}
-\usepackage[english,arabic]{babel}
+\usepackage[english]{babel}
 \usepackage{geometry}
 \usepackage{graphicx}
-\usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{fancyhdr}
 \usepackage{titlesec}
@@ -13,6 +12,9 @@
 \usepackage{listings}
 \usepackage{tcolorbox}
 \usepackage{float}
+
+% Load hyperref last (important!)
+\usepackage{hyperref}
 
 % Page setup
 \geometry{
@@ -30,7 +32,7 @@
 \definecolor{lightgray}{RGB}{245,245,245}
 \definecolor{darkgray}{RGB}{64,64,64}
 
-% Hyperref setup
+% Hyperref setup (must be after hyperref package)
 \hypersetup{
     colorlinks=true,
     linkcolor=primaryblue,
@@ -39,7 +41,11 @@
     pdftitle={Smart Shop System - Software Requirements Specification},
     pdfauthor={Development Team},
     pdfsubject={SRS Document},
-    pdfkeywords={SRS, Requirements, E-commerce, Shop System}
+    pdfkeywords={SRS, Requirements, E-commerce, Shop System},
+    unicode=false,
+    pdfencoding=auto,
+    breaklinks=true,
+    pdfborder={0 0 0}
 }
 
 % Header and Footer
@@ -285,7 +291,7 @@ The system provides the following main functions:
     \item Must use Python 3.11+
     \item Must use Flask framework
     \item Must be deployable on Railway platform
-    \item Must support RTL (Right-to-Left) for Arabic language
+    \item Must support RTL (Right-to-Left) for Arabic language in the web interface
     \item Must be responsive for mobile devices
 \end{itemize}
 
@@ -467,7 +473,7 @@ The system provides the following main functions:
     
     \textbf{Description:} Customer enters delivery address
     
-    \textbf{Input:} Address text (optional, default: "استلام من الفرع")
+    \textbf{Input:} Address text (optional, default: "Pickup from branch")
     
     \textbf{Validation:} None (optional field)
 \end{infobox}
@@ -516,7 +522,7 @@ The system provides the following main functions:
     \item \textbf{Layout:} Centered welcome card
     \item \textbf{Elements:}
     \begin{itemize}
-        \item Title: "نظام المتجر الذكي"
+        \item Title: Smart Shop System (in Arabic: نظام المتجر الذكي)
         \item Two buttons: Admin, Customer
         \item Information box with test credentials
     \end{itemize}
@@ -671,7 +677,7 @@ The system follows MVC (Model-View-Controller) pattern:
 
 \section{Usability Requirements}
 \begin{itemize}
-    \item \textbf{Language:} Arabic (RTL support)
+    \item \textbf{Language:} English (with Arabic text support in UI)
     \item \textbf{Responsive Design:} Works on desktop, tablet, mobile
     \item \textbf{Accessibility:} Semantic HTML, clear labels
     \item \textbf{User Feedback:} Flash messages for actions
