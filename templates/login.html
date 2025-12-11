@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card">
+        <h2>🔒 تسجيل الدخول</h2>
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label>اسم المستخدم:</label>
+                <input type="text" name="username" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور:</label>
+                <input type="password" name="password" required class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">دخول</button>
+        </form>
+        <p class="text-center">
+            ليس لديك حساب؟ <a href="{{ url_for('register') }}">سجل الآن</a>
+        </p>
+        <p class="text-center">
+            <a href="{{ url_for('home') }}">← العودة للصفحة الرئيسية</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+

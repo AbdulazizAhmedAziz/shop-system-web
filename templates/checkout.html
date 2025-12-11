@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}إتمام الشراء{% endblock %}
+
+{% block content %}
+<div class="checkout-page">
+    <div class="page-header">
+        <h2>🚚 إتمام الشراء</h2>
+    </div>
+
+    <div class="checkout-container">
+        <div class="checkout-form-section">
+            <h3>معلومات الشحن والدفع</h3>
+            <form method="POST" action="{{ url_for('checkout') }}">
+                <div class="form-group">
+                    <label>العنوان:</label>
+                    <textarea name="address" class="form-control" rows="3" placeholder="اكتب العنوان الكامل"></textarea>
+                    <small class="text-muted">اتركه فارغاً للاستلام من الفرع</small>
+                </div>
+
+                <div class="form-group">
+                    <label>طريقة الدفع:</label>
+                    <div class="payment-methods">
+                        <label class="payment-option">
+                            <input type="radio" name="pay_method" value="Online Payment" required>
+                            <span>🌐 أونلاين (Online)</span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="pay_method" value="Cash on Delivery" required>
+                            <span>💵 كاش (COD)</span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="pay_method" value="Visa on Delivery" required>
+                            <span>🏧 شبكة (POS)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-large btn-block">
+                    تأكيد الطلب →
+                </button>
+            </form>
+        </div>
+
+        <div class="checkout-summary-section">
+            <h3>ملخص الطلب</h3>
+            <div class="order-summary">
+                {% for item in user.cart %}
+                {% set prod = item.product %}
+                {% set qty = item.qty %}
+                {% set item_price = prod.price - (prod.price * prod.offer_discount / 100) if prod.offer_discount > 0 else prod.price %}
+                {% set item_total = item_price * qty %}
+                <div class="order-item">
+                    <div class="item-name">{{ prod.name }} x{{ qty }}</div>
+                    <div class="item-price">{{ item_total|round(2) }}$</div>
+                </div>
+                {% endfor %}
+                <div class="order-total">
+                    <strong>الإجمالي: {{ total|round(2) }}$</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

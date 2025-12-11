@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}المنتجات{% endblock %}
+
+{% block content %}
+<div class="products-page">
+    <div class="page-header">
+        <h2>{% if show_offers_only %}🔥 العروض الخاصة{% else %}🛍️ جميع المنتجات{% endif %}</h2>
+        <div class="page-actions">
+            <a href="{{ url_for('customer_dashboard') }}" class="btn btn-secondary">← العودة</a>
+            {% if not show_offers_only %}
+            <a href="{{ url_for('customer_products', offers_only='true') }}" class="btn btn-success">🔥 العروض فقط</a>
+            {% else %}
+            <a href="{{ url_for('customer_products') }}" class="btn btn-primary">جميع المنتجات</a>
+            {% endif %}
+            <a href="{{ url_for('customer_cart') }}" class="btn btn-warning">🛒 السلة ({{ user.cart|length }})</a>
+        </div>
+    </div>
+
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card {% if product.offer_discount > 0 or product.offer_gift %}has-offer{% endif %}">
+            {% if product.offer_discount > 0 or product.offer_gift %}
+            <div class="offer-badge">⭐ عرض خاص</div>
+            {% endif %}
+            
+            <div class="product-info">
+                <h3>{{ product.name }}</h3>
+                <p class="product-category">{{ product.category }}</p>
+                
+                <div class="product-price">
+                    {% if product.offer_discount > 0 %}
+                        <span class="old-price">{{ product.price }}$</span>
+                        <span class="new-price">{{ (product.price - (product.price * product.offer_discount / 100))|round(2) }}$</span>
+                        <span class="discount-badge">خصم {{ product.offer_discount }}%</span>
+                    {% else %}
+                        <span class="current-price">{{ product.price }}$</span>
+                    {% endif %}
+                </div>
+                
+                <div class="product-stock">
+                    {% if product.stock == 0 %}
+                        <span class="badge badge-danger">نفد</span>
+                    {% else %}
+                        <span class="badge badge-success">متوفر: {{ product.stock }}</span>
+                    {% endif %}
+                </div>
+                
+                {% if product.offer_gift %}
+                <div class="product-gift">
+                    <span class="badge badge-info">🎁 {{ product.offer_gift }}</span>
+                </div>
+                {% endif %}
+                
+                {% if product.offer_limit > 0 %}
+                <div class="product-limit">
+                    <small class="text-warning">⛔ حد أقصى: {{ product.offer_limit }} قطع للعميل</small>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="product-actions">
+                {% if product.stock > 0 %}
+                <button class="btn btn-primary btn-block" onclick="addToCart({{ product.id }})">
+                    إضافة للسلة
+                </button>
+                {% else %}
+                <button class="btn btn-secondary btn-block" disabled>غير متوفر</button>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if not products %}
+    <div class="empty-state">
+        <p>🚫 لا توجد منتجات متاحة</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Add to Cart Modal -->
+<div id="cartModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeCartModal()">&times;</span>
+        <h3>إضافة للسلة</h3>
+        <div id="productDetails"></div>
+        <form id="addToCartForm">
+            <input type="hidden" id="cart_product_id" name="product_id">
+            <div class="form-group">
+                <label>الكمية:</label>
+                <input type="number" id="cart_qty" name="qty" min="1" value="1" class="form-control">
+                <small id="qtyHint" class="text-muted"></small>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">إضافة</button>
+        </form>
+    </div>
+</div>
+
+<script>
+let currentProductId = null;
+
+async function addToCart(productId) {
+    currentProductId = productId;
+    const response = await fetch(`/api/product/${productId}`);
+    const data = await response.json();
+    
+    if (data.error) {
+        alert(data.error);
+        return;
+    }
+    
+    const product = data.product;
+    const maxAllowed = data.max_allowed;
+    const currentInCart = data.current_in_cart;
+    const remainingLimit = data.remaining_limit;
+    
+    document.getElementById('cart_product_id').value = productId;
+    document.getElementById('cart_qty').max = maxAllowed;
+    document.getElementById('cart_qty').value = 1;
+    
+    let detailsHtml = `
+        <div class="product-details-modal">
+            <h4>${product.name}</h4>
+            <p><strong>السعر:</strong> ${product.new_price}$ ${product.offer_discount > 0 ? `(خصم ${product.offer_discount}%)` : ''}</p>
+            <p><strong>المخزون:</strong> ${product.stock} قطع</p>
+    `;
+    
+    if (currentInCart > 0) {
+        detailsHtml += `<p class="text-info">لديك ${currentInCart} في السلة بالفعل</p>`;
+    }
+    
+    if (product.offer_limit > 0) {
+        detailsHtml += `<p class="text-warning">⛔ الحد الأقصى: ${product.offer_limit} قطع للعميل</p>`;
+        if (remainingLimit !== null && remainingLimit > 0) {
+            detailsHtml += `<p class="text-success">المتبقي لك: ${remainingLimit} قطع</p>`;
+        }
+    }
+    
+    detailsHtml += `</div>`;
+    
+    document.getElementById('productDetails').innerHTML = detailsHtml;
+    document.getElementById('qtyHint').textContent = `الحد الأقصى المسموح: ${maxAllowed} قطع`;
+    
+    document.getElementById('cartModal').style.display = 'block';
+}
+
+function closeCartModal() {
+    document.getElementById('cartModal').style.display = 'none';
+}
+
+document.getElementById('addToCartForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const qty = parseInt(document.getElementById('cart_qty').value);
+    const productId = parseInt(document.getElementById('cart_product_id').value);
+    
+    const response = await fetch('/customer/add_to_cart', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            product_id: productId,
+            qty: qty
+        })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+        alert(data.message);
+        closeCartModal();
+        // Update cart count if needed
+        if (document.querySelector('.btn-warning')) {
+            const cartBtn = document.querySelector('.btn-warning');
+            const match = cartBtn.textContent.match(/\((\d+)\)/);
+            if (match) {
+                cartBtn.textContent = cartBtn.textContent.replace(/\(\d+\)/, `(${data.cart_count})`);
+            }
+        }
+    } else {
+        alert(data.message);
+    }
+});
+
+window.onclick = function(event) {
+    const modal = document.getElementById('cartModal');
+    if (event.target == modal) {
+        closeCartModal();
+    }
+}
+</script>
+{% endblock %}
+

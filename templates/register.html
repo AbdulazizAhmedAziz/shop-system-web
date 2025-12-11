@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card">
+        <h2>📝 إنشاء حساب جديد</h2>
+        <form method="POST" action="{{ url_for('register') }}">
+            <div class="form-group">
+                <label>اسم المستخدم:</label>
+                <input type="text" name="username" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور:</label>
+                <input type="password" name="password" required class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success btn-block">تسجيل</button>
+        </form>
+        <p class="text-center">
+            لديك حساب بالفعل؟ <a href="{{ url_for('login') }}">سجل الدخول</a>
+        </p>
+        <p class="text-center">
+            <a href="{{ url_for('home') }}">← العودة للصفحة الرئيسية</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+

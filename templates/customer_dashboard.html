@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}لوحة العميل{% endblock %}
+
+{% block content %}
+<div class="customer-dashboard">
+    <h2>👋 مرحباً {{ session.user }}</h2>
+    
+    <div class="dashboard-cards">
+        <div class="card">
+            <h3>🛍️ تصفح المنتجات</h3>
+            <p>عرض جميع المنتجات المتاحة</p>
+            <a href="{{ url_for('customer_products') }}" class="btn btn-primary">تصفح</a>
+        </div>
+        
+        <div class="card">
+            <h3>🔥 العروض الخاصة</h3>
+            <p>المنتجات التي عليها عروض فقط</p>
+            <a href="{{ url_for('customer_products', offers_only='true') }}" class="btn btn-success">عرض العروض</a>
+        </div>
+        
+        <div class="card">
+            <h3>🛒 السلة</h3>
+            <p>عرض السلة وإتمام الشراء</p>
+            <a href="{{ url_for('customer_cart') }}" class="btn btn-warning">
+                السلة ({{ cart_count }})
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
