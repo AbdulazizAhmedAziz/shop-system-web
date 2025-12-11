@@ -1,0 +1,1115 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[english,arabic]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{float}
+
+% Page setup
+\geometry{
+    left=2.5cm,
+    right=2.5cm,
+    top=3cm,
+    bottom=3cm,
+    headheight=15pt
+}
+
+% Colors
+\definecolor{primaryblue}{RGB}{0,102,204}
+\definecolor{secondaryblue}{RGB}{51,153,255}
+\definecolor{accentorange}{RGB}{255,140,0}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{64,64,64}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=secondaryblue,
+    citecolor=accentorange,
+    pdftitle={Smart Shop System - Software Requirements Specification},
+    pdfauthor={Development Team},
+    pdfsubject={SRS Document},
+    pdfkeywords={SRS, Requirements, E-commerce, Shop System}
+}
+
+% Header and Footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\thepage}
+\fancyfoot[C]{Smart Shop System - SRS Document v1.0}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+% Title formatting
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries\color{primaryblue}}
+{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+
+\titleformat{\section}
+{\normalfont\Large\bfseries\color{primaryblue}}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\normalfont\large\bfseries\color{secondaryblue}}
+{\thesubsection}{1em}{}
+
+% Custom boxes
+\newtcolorbox{infobox}[1]{
+    colback=lightgray,
+    colframe=primaryblue,
+    title=#1,
+    fonttitle=\bfseries,
+    boxrule=1pt,
+    arc=3pt
+}
+
+\newtcolorbox{warningbox}[1]{
+    colback=yellow!10,
+    colframe=accentorange,
+    title=#1,
+    fonttitle=\bfseries,
+    boxrule=1pt,
+    arc=3pt
+}
+
+% Listings setup
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{primaryblue}\bfseries,
+    commentstyle=\color{darkgray}\itshape,
+    stringstyle=\color{accentorange},
+    numbers=left,
+    numberstyle=\tiny\color{darkgray},
+    stepnumber=1,
+    numbersep=5pt,
+    frame=single,
+    breaklines=true,
+    showstringspaces=false
+}
+
+% Custom commands
+\newcommand{\req}[1]{\textbf{\color{primaryblue}#1}}
+\newcommand{\priority}[1]{\textbf{\color{accentorange}Priority: #1}}
+\newcommand{\version}{1.0}
+\newcommand{\docdate}{December 11, 2025}
+
+% Document
+\begin{document}
+
+% Title Page
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\Huge\bfseries\color{primaryblue} Software Requirements\\[0.5cm] Specification (SRS)}\\[1cm]
+    
+    {\Large\bfseries Smart Shop System}\\[0.5cm]
+    
+    {\large E-Commerce Web Application}\\[2cm]
+    
+    \begin{infobox}{Document Information}
+        \begin{tabular}{ll}
+            \textbf{Version:} & \version \\
+            \textbf{Date:} & \docdate \\
+            \textbf{Author:} & Development Team \\
+            \textbf{Status:} & Approved \\
+            \textbf{Classification:} & Internal Use
+        \end{tabular}
+    \end{infobox}
+    
+    \vfill
+    
+    {\large\itshape This document specifies the requirements for the Smart Shop System,\\
+    a web-based e-commerce platform.}
+    
+    \vspace{1cm}
+    
+    \rule{\textwidth}{0.5pt}
+    
+    \vspace{0.5cm}
+    
+    {\small Confidential - For Internal Use Only}
+    
+\end{titlepage}
+
+% Table of Contents
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+\newpage
+
+% Document History
+\chapter*{Document History}
+\addcontentsline{toc}{chapter}{Document History}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|l|}
+        \hline
+        \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Changes} \\
+        \hline
+        1.0 & \docdate & Development Team & Initial release \\
+        \hline
+    \end{tabular}
+    \caption{Document Revision History}
+\end{table}
+
+% Approval
+\chapter*{Approval}
+\addcontentsline{toc}{chapter}{Approval}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Role} & \textbf{Name} & \textbf{Signature} \\
+        \hline
+        Prepared by & Development Team & \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ \\
+        \hline
+        Reviewed by & & \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ \\
+        \hline
+        Approved by & & \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ \\
+        \hline
+    \end{tabular}
+    \caption{Document Approval}
+\end{table}
+
+% Chapter 1: Introduction
+\chapter{Introduction}
+
+\section{Purpose}
+This document specifies the requirements for the Smart Shop System, a web-based e-commerce platform that enables online shopping with advanced features including product management, shopping cart functionality, order processing, and promotional offers.
+
+\section{Scope}
+The Smart Shop System is designed to:
+\begin{itemize}
+    \item Provide a user-friendly web interface for customers to browse and purchase products
+    \item Enable administrators to manage inventory, products, and promotional offers
+    \item Support multiple user roles (Admin and Customer)
+    \item Handle order processing and payment methods
+    \item Implement promotional offers with discounts, gifts, and purchase limits
+\end{itemize}
+
+\section{Definitions, Acronyms, and Abbreviations}
+\begin{description}
+    \item[SRS] Software Requirements Specification
+    \item[UI] User Interface
+    \item[API] Application Programming Interface
+    \item[Admin] Administrator user role
+    \item[Customer] Regular user role
+    \item[COD] Cash on Delivery
+    \item[POS] Point of Sale (Visa on Delivery)
+    \item[MVC] Model-View-Controller
+    \item[WSGI] Web Server Gateway Interface
+    \item[RTL] Right-to-Left (text direction)
+\end{description}
+
+\section{References}
+\begin{itemize}
+    \item Flask Framework Documentation: \url{https://flask.palletsprojects.com/}
+    \item Python 3.11 Documentation: \url{https://docs.python.org/3.11/}
+    \item Railway Deployment Guide: \url{https://docs.railway.app/}
+\end{itemize}
+
+\section{Overview}
+This document is organized into sections covering functional requirements, system architecture, user interfaces, and non-functional requirements.
+
+% Chapter 2: Overall Description
+\chapter{Overall Description}
+
+\section{Product Perspective}
+The Smart Shop System is a standalone web application built using:
+\begin{itemize}
+    \item \textbf{Backend:} Python 3.11 with Flask framework
+    \item \textbf{Frontend:} HTML, CSS, JavaScript
+    \item \textbf{Deployment:} Railway cloud platform
+    \item \textbf{Architecture:} Model-View-Controller (MVC) pattern
+\end{itemize}
+
+\section{Product Functions}
+The system provides the following main functions:
+\begin{enumerate}
+    \item User authentication and authorization
+    \item Product catalog management
+    \item Shopping cart functionality
+    \item Order processing
+    \item Promotional offer management
+    \item Inventory management
+    \item Sales reporting
+\end{enumerate}
+
+\section{User Classes and Characteristics}
+
+\subsection{Administrator}
+\begin{infobox}{Administrator Profile}
+    \begin{itemize}
+        \item \textbf{Responsibilities:} Manage products, inventory, offers, and view sales
+        \item \textbf{Access Level:} Full system access
+        \item \textbf{Default Credentials:} admin/123 or place/123
+    \end{itemize}
+\end{infobox}
+
+\subsection{Customer}
+\begin{infobox}{Customer Profile}
+    \begin{itemize}
+        \item \textbf{Responsibilities:} Browse products, add to cart, place orders
+        \item \textbf{Access Level:} Limited to shopping features
+        \item \textbf{Registration:} Can create new account
+    \end{itemize}
+\end{infobox}
+
+\section{Operating Environment}
+\begin{itemize}
+    \item \textbf{Development:} Local machine with Python 3.11
+    \item \textbf{Production:} Railway cloud platform
+    \item \textbf{Browsers:} Chrome, Firefox, Safari, Edge (latest versions)
+    \item \textbf{Operating Systems:} Windows, macOS, Linux (for users)
+\end{itemize}
+
+\section{Design and Implementation Constraints}
+\begin{itemize}
+    \item Must use Python 3.11+
+    \item Must use Flask framework
+    \item Must be deployable on Railway platform
+    \item Must support RTL (Right-to-Left) for Arabic language
+    \item Must be responsive for mobile devices
+\end{itemize}
+
+\section{Assumptions and Dependencies}
+\begin{itemize}
+    \item Users have modern web browsers
+    \item Internet connection is available
+    \item Railway platform is operational
+    \item Data is stored in memory (no database required for MVP)
+\end{itemize}
+
+% Chapter 3: System Features
+\chapter{System Features}
+
+\section{User Authentication}
+
+\subsection{Login}
+\begin{infobox}{Login Feature}
+    \priority{High}
+    
+    \textbf{Description:} Users can log in with username and password
+    
+    \textbf{Input:} Username, Password
+    
+    \textbf{Output:} Redirect to appropriate dashboard
+    
+    \textbf{Validation:}
+    \begin{itemize}
+        \item Username and password must match existing account
+        \item Case-sensitive username
+    \end{itemize}
+\end{infobox}
+
+\subsection{Registration}
+\begin{infobox}{Registration Feature}
+    \priority{High}
+    
+    \textbf{Description:} New customers can create accounts
+    
+    \textbf{Input:} Username, Password
+    
+    \textbf{Output:} New user account created, auto-login
+    
+    \textbf{Validation:}
+    \begin{itemize}
+        \item Username must be unique
+        \item Username cannot be empty
+        \item Password cannot be empty
+    \end{itemize}
+\end{infobox}
+
+\subsection{Logout}
+\begin{infobox}{Logout Feature}
+    \priority{Medium}
+    
+    \textbf{Description:} Users can log out from the system
+    
+    \textbf{Output:} Session cleared, redirect to home page
+\end{infobox}
+
+\section{Product Management (Admin)}
+
+\subsection{View Products}
+\begin{infobox}{View Products}
+    \priority{High}
+    
+    \textbf{Description:} Admin can view all products with details
+    
+    \textbf{Display:} Table format with ID, Name, Price, Stock, Offers
+\end{infobox}
+
+\subsection{Edit Product}
+\begin{infobox}{Edit Product}
+    \priority{High}
+    
+    \textbf{Description:} Admin can modify product information
+    
+    \textbf{Editable Fields:} Name, Price, Stock
+    
+    \textbf{Validation:}
+    \begin{itemize}
+        \item Price must be positive number
+        \item Stock must be non-negative integer
+    \end{itemize}
+\end{infobox}
+
+\subsection{Manage Offers}
+\begin{infobox}{Manage Offers}
+    \priority{High}
+    
+    \textbf{Description:} Admin can create/modify promotional offers
+    
+    \textbf{Offer Types:}
+    \begin{itemize}
+        \item Discount percentage (0-100\%)
+        \item Free gift (text description)
+        \item Purchase limit per customer (0 = unlimited)
+    \end{itemize}
+    
+    \textbf{Validation:}
+    \begin{itemize}
+        \item Discount must be between 0-100
+        \item Limit must be non-negative integer
+    \end{itemize}
+\end{infobox}
+
+\section{Product Browsing (Customer)}
+
+\subsection{View All Products}
+\begin{infobox}{View All Products}
+    \priority{High}
+    
+    \textbf{Description:} Customers can browse all available products
+    
+    \textbf{Display:} Grid layout with product cards
+    
+    \textbf{Information Shown:} Name, Price, Stock, Category, Offers
+\end{infobox}
+
+\subsection{View Offers Only}
+\begin{infobox}{View Offers Only}
+    \priority{Medium}
+    
+    \textbf{Description:} Customers can filter to see only products with offers
+    
+    \textbf{Filter:} Products with discount > 0 OR gift != null
+\end{infobox}
+
+\section{Shopping Cart}
+
+\subsection{Add to Cart}
+\begin{infobox}{Add to Cart}
+    \priority{High}
+    
+    \textbf{Description:} Customers can add products to shopping cart
+    
+    \textbf{Input:} Product ID, Quantity
+    
+    \textbf{Validation:}
+    \begin{itemize}
+        \item Quantity must be positive
+        \item Quantity cannot exceed available stock
+        \item If offer limit exists, total quantity in cart cannot exceed limit
+    \end{itemize}
+    
+    \textbf{Output:} Product added to cart, cart count updated
+\end{infobox}
+
+\subsection{View Cart}
+\begin{infobox}{View Cart}
+    \priority{High}
+    
+    \textbf{Description:} Customers can view cart contents
+    
+    \textbf{Display:} List of items with quantities and prices
+    
+    \textbf{Information:} Product name, Quantity, Unit price, Total price, Discounts
+\end{infobox}
+
+\subsection{Calculate Total}
+\begin{infobox}{Calculate Total}
+    \priority{High}
+    
+    \textbf{Description:} System calculates cart total with discounts
+    
+    \textbf{Calculation:}
+    \begin{itemize}
+        \item Apply discount percentage to each item
+        \item Sum all item totals
+        \item Display final total
+    \end{itemize}
+\end{infobox}
+
+\section{Checkout Process}
+
+\subsection{Enter Shipping Address}
+\begin{infobox}{Shipping Address}
+    \priority{High}
+    
+    \textbf{Description:} Customer enters delivery address
+    
+    \textbf{Input:} Address text (optional, default: "استلام من الفرع")
+    
+    \textbf{Validation:} None (optional field)
+\end{infobox}
+
+\subsection{Select Payment Method}
+\begin{infobox}{Payment Method}
+    \priority{High}
+    
+    \textbf{Description:} Customer selects payment method
+    
+    \textbf{Options:}
+    \begin{enumerate}
+        \item Online Payment (immediate payment)
+        \item Cash on Delivery (COD)
+        \item Visa on Delivery (POS)
+    \end{enumerate}
+    
+    \textbf{Output:} Payment method and status set
+\end{infobox}
+
+\subsection{Process Order}
+\begin{infobox}{Process Order}
+    \priority{High}
+    
+    \textbf{Description:} System processes the order
+    
+    \textbf{Steps:}
+    \begin{enumerate}
+        \item Validate cart is not empty
+        \item Validate stock availability
+        \item Calculate final total
+        \item Update product stock
+        \item Create order record
+        \item Clear shopping cart
+        \item Display order confirmation
+    \end{enumerate}
+\end{infobox}
+
+% Chapter 4: External Interface Requirements
+\chapter{External Interface Requirements}
+
+\section{User Interfaces}
+
+\subsection{Home Page}
+\begin{itemize}
+    \item \textbf{Layout:} Centered welcome card
+    \item \textbf{Elements:}
+    \begin{itemize}
+        \item Title: "نظام المتجر الذكي"
+        \item Two buttons: Admin, Customer
+        \item Information box with test credentials
+    \end{itemize}
+\end{itemize}
+
+\subsection{Login Page}
+\begin{itemize}
+    \item \textbf{Layout:} Centered form
+    \item \textbf{Elements:}
+    \begin{itemize}
+        \item Username input field
+        \item Password input field
+        \item Login button
+        \item Link to registration
+        \item Link to home
+    \end{itemize}
+\end{itemize}
+
+\subsection{Admin Dashboard}
+\begin{itemize}
+    \item \textbf{Layout:} Tabbed interface
+    \item \textbf{Tabs:}
+    \begin{itemize}
+        \item Products (Inventory)
+        \item Offers Management
+        \item Sales (Orders)
+    \end{itemize}
+    \item \textbf{Elements:} Data tables, Action buttons, Modals
+\end{itemize}
+
+\subsection{Customer Dashboard}
+\begin{itemize}
+    \item \textbf{Layout:} Card-based grid
+    \item \textbf{Cards:}
+    \begin{itemize}
+        \item Browse All Products
+        \item View Offers Only
+        \item Shopping Cart
+    \end{itemize}
+    \item \textbf{Elements:} Navigation buttons, Cart count badge
+\end{itemize}
+
+\section{Hardware Interfaces}
+\begin{itemize}
+    \item \textbf{Server:} Railway cloud infrastructure
+    \item \textbf{Client:} Standard web browser on any device
+\end{itemize}
+
+\section{Software Interfaces}
+\begin{itemize}
+    \item \textbf{Web Server:} Gunicorn WSGI server
+    \item \textbf{Framework:} Flask 3.0.0
+    \item \textbf{Python:} 3.11+
+    \item \textbf{Deployment:} Railway platform
+\end{itemize}
+
+\section{Communication Interfaces}
+\begin{itemize}
+    \item \textbf{Protocol:} HTTP/HTTPS
+    \item \textbf{Port:} Dynamic (set by Railway via PORT environment variable)
+    \item \textbf{Format:} HTML, JSON (for API endpoints)
+\end{itemize}
+
+% Chapter 5: System Architecture
+\chapter{System Architecture}
+
+\section{Architecture Overview}
+The system follows MVC (Model-View-Controller) pattern:
+
+\begin{figure}[H]
+    \centering
+    \fbox{
+        \begin{minipage}{0.8\textwidth}
+            \centering
+            \vspace{0.5cm}
+            Client (Browser) \\
+            $\downarrow$ HTTP/HTTPS \\
+            Flask Routes (Controller) \\
+            $\downarrow$ \\
+            Models (Product, User, Order) \\
+            Views (HTML Templates)
+            \vspace{0.5cm}
+        \end{minipage}
+    }
+    \caption{System Architecture}
+\end{figure}
+
+\section{Component Structure}
+
+\subsection{Models (Classes)}
+\begin{itemize}
+    \item \textbf{Product:} Product information and offers
+    \item \textbf{User:} User accounts and authentication
+    \item \textbf{Order:} Order records
+    \item \textbf{ShopSystem:} Main controller class
+\end{itemize}
+
+\subsection{Views (Templates)}
+\begin{itemize}
+    \item \texttt{base.html}: Base template
+    \item \texttt{home.html}: Home page
+    \item \texttt{login.html}: Login page
+    \item \texttt{register.html}: Registration page
+    \item \texttt{admin\_dashboard.html}: Admin interface
+    \item \texttt{customer\_dashboard.html}: Customer interface
+    \item \texttt{customer\_products.html}: Product listing
+    \item \texttt{customer\_cart.html}: Shopping cart
+    \item \texttt{checkout.html}: Checkout page
+\end{itemize}
+
+\subsection{Controllers (Routes)}
+\begin{itemize}
+    \item \textbf{Authentication routes:} \texttt{/login}, \texttt{/register}, \texttt{/logout}
+    \item \textbf{Admin routes:} \texttt{/admin/dashboard}, \texttt{/admin/edit\_product}, \texttt{/admin/apply\_offer}
+    \item \textbf{Customer routes:} \texttt{/customer/dashboard}, \texttt{/customer/products}, \texttt{/customer/cart}, \texttt{/customer/checkout}
+    \item \textbf{API routes:} \texttt{/api/product/<id>}, \texttt{/customer/add\_to\_cart}
+\end{itemize}
+
+\section{Data Flow}
+\begin{center}
+    User Request $\rightarrow$ Flask Route $\rightarrow$ Business Logic $\rightarrow$ Model Update $\rightarrow$ Response (HTML/JSON)
+\end{center}
+
+% Chapter 6: Non-Functional Requirements
+\chapter{Non-Functional Requirements}
+
+\section{Performance Requirements}
+\begin{itemize}
+    \item \textbf{Page Load Time:} $< 2$ seconds
+    \item \textbf{Response Time:} $< 500$ms for API calls
+    \item \textbf{Concurrent Users:} Support at least 50 simultaneous users
+    \item \textbf{Database Queries:} N/A (in-memory storage)
+\end{itemize}
+
+\section{Security Requirements}
+\begin{itemize}
+    \item \textbf{Authentication:} Username/password based
+    \item \textbf{Session Management:} Flask sessions with secret key
+    \item \textbf{Password Storage:} Plain text (for MVP - should be hashed in production)
+    \item \textbf{Input Validation:} All user inputs validated
+    \item \textbf{CSRF Protection:} Should be implemented in production
+    \item \textbf{HTTPS:} Required in production (Railway provides automatically)
+\end{itemize}
+
+\section{Reliability Requirements}
+\begin{itemize}
+    \item \textbf{Uptime:} 99\% availability
+    \item \textbf{Error Handling:} Graceful error messages
+    \item \textbf{Data Backup:} Not implemented (in-memory data)
+    \item \textbf{Recovery:} Application restart required for data reset
+\end{itemize}
+
+\section{Usability Requirements}
+\begin{itemize}
+    \item \textbf{Language:} Arabic (RTL support)
+    \item \textbf{Responsive Design:} Works on desktop, tablet, mobile
+    \item \textbf{Accessibility:} Semantic HTML, clear labels
+    \item \textbf{User Feedback:} Flash messages for actions
+    \item \textbf{Navigation:} Clear navigation paths
+\end{itemize}
+
+\section{Scalability Requirements}
+\begin{itemize}
+    \item \textbf{Horizontal Scaling:} Supported by Railway
+    \item \textbf{Vertical Scaling:} Limited by Railway free tier
+    \item \textbf{Data Storage:} In-memory (not scalable - database needed for production)
+\end{itemize}
+
+% Chapter 7: User Stories
+\chapter{User Stories}
+
+\section{Admin Stories}
+
+\begin{infobox}{US-ADM-001}
+    \textbf{As an admin,} I want to view all products \textbf{so that} I can monitor inventory.
+\end{infobox}
+
+\begin{infobox}{US-ADM-002}
+    \textbf{As an admin,} I want to edit product details \textbf{so that} I can update prices and stock.
+\end{infobox}
+
+\begin{infobox}{US-ADM-003}
+    \textbf{As an admin,} I want to create promotional offers \textbf{so that} I can attract customers.
+\end{infobox}
+
+\begin{infobox}{US-ADM-004}
+    \textbf{As an admin,} I want to set purchase limits on offers \textbf{so that} I can control inventory.
+\end{infobox}
+
+\begin{infobox}{US-ADM-005}
+    \textbf{As an admin,} I want to view all orders \textbf{so that} I can track sales.
+\end{infobox}
+
+\section{Customer Stories}
+
+\begin{infobox}{US-CUS-001}
+    \textbf{As a customer,} I want to browse products \textbf{so that} I can find items to purchase.
+\end{infobox}
+
+\begin{infobox}{US-CUS-002}
+    \textbf{As a customer,} I want to see products with offers \textbf{so that} I can find deals.
+\end{infobox}
+
+\begin{infobox}{US-CUS-003}
+    \textbf{As a customer,} I want to add products to cart \textbf{so that} I can purchase multiple items.
+\end{infobox}
+
+\begin{infobox}{US-CUS-004}
+    \textbf{As a customer,} I want to see my cart total \textbf{so that} I know how much I'll pay.
+\end{infobox}
+
+\begin{infobox}{US-CUS-005}
+    \textbf{As a customer,} I want to checkout \textbf{so that} I can complete my purchase.
+\end{infobox}
+
+\begin{infobox}{US-CUS-006}
+    \textbf{As a customer,} I want to choose payment method \textbf{so that} I can pay as preferred.
+\end{infobox}
+
+\begin{infobox}{US-CUS-007}
+    \textbf{As a customer,} I want to see discounts applied \textbf{so that} I know I'm getting a deal.
+\end{infobox}
+
+% Chapter 8: Use Cases
+\chapter{Use Cases}
+
+\section{UC-001: Admin Login}
+\begin{infobox}{Use Case Details}
+    \textbf{Actor:} Administrator \\
+    \textbf{Precondition:} Admin has valid credentials \\
+    \textbf{Main Flow:}
+    \begin{enumerate}
+        \item Admin navigates to login page
+        \item Enters username and password
+        \item System validates credentials
+        \item System redirects to admin dashboard
+    \end{enumerate}
+    \textbf{Postcondition:} Admin is logged in and can access admin features
+\end{infobox}
+
+\section{UC-002: Customer Registration}
+\begin{infobox}{Use Case Details}
+    \textbf{Actor:} New Customer \\
+    \textbf{Precondition:} Customer is not registered \\
+    \textbf{Main Flow:}
+    \begin{enumerate}
+        \item Customer navigates to registration page
+        \item Enters desired username and password
+        \item System checks username availability
+        \item System creates new account
+        \item System auto-logs in customer
+        \item System redirects to customer dashboard
+    \end{enumerate}
+    \textbf{Postcondition:} Customer account created and logged in
+\end{infobox}
+
+\section{UC-003: Add Product to Cart}
+\begin{infobox}{Use Case Details}
+    \textbf{Actor:} Customer \\
+    \textbf{Precondition:} Customer is logged in, product exists \\
+    \textbf{Main Flow:}
+    \begin{enumerate}
+        \item Customer browses products
+        \item Customer clicks "Add to Cart" on a product
+        \item System shows quantity selection modal
+        \item Customer enters quantity
+        \item System validates quantity (stock, limits)
+        \item System adds product to cart
+        \item System shows success message
+    \end{enumerate}
+    \textbf{Alternative Flow 3a:} Quantity exceeds stock $\rightarrow$ Show error \\
+    \textbf{Alternative Flow 3b:} Quantity exceeds offer limit $\rightarrow$ Show error \\
+    \textbf{Postcondition:} Product added to cart
+\end{infobox}
+
+\section{UC-004: Process Order}
+\begin{infobox}{Use Case Details}
+    \textbf{Actor:} Customer \\
+    \textbf{Precondition:} Customer has items in cart \\
+    \textbf{Main Flow:}
+    \begin{enumerate}
+        \item Customer navigates to checkout
+        \item Customer enters shipping address
+        \item Customer selects payment method
+        \item Customer confirms order
+        \item System validates cart and stock
+        \item System calculates total with discounts
+        \item System creates order record
+        \item System updates product stock
+        \item System clears cart
+        \item System shows order confirmation
+    \end{enumerate}
+    \textbf{Alternative Flow 4a:} Stock insufficient $\rightarrow$ Show error, prevent order \\
+    \textbf{Postcondition:} Order created, stock updated, cart cleared
+\end{infobox}
+
+\section{UC-005: Admin Create Offer}
+\begin{infobox}{Use Case Details}
+    \textbf{Actor:} Administrator \\
+    \textbf{Precondition:} Admin is logged in, product exists \\
+    \textbf{Main Flow:}
+    \begin{enumerate}
+        \item Admin navigates to Offers tab
+        \item Admin clicks "Manage Offer" on a product
+        \item Admin enters discount percentage (optional)
+        \item Admin enters gift name (optional)
+        \item Admin enters purchase limit (optional)
+        \item Admin clicks "Apply"
+        \item System saves offer to product
+        \item System shows success message
+    \end{enumerate}
+    \textbf{Postcondition:} Offer applied to product
+\end{infobox}
+
+% Chapter 9: Data Model
+\chapter{Data Model}
+
+\section{Product Entity}
+\begin{lstlisting}[language=Python, caption=Product Entity Structure]
+Product {
+    id: Integer (Primary Key)
+    name: String
+    price: Float
+    stock: Integer
+    category: String
+    offer_discount: Float (0-100)
+    offer_gift: String (nullable)
+    offer_limit: Integer (0 = unlimited)
+}
+\end{lstlisting}
+
+\section{User Entity}
+\begin{lstlisting}[language=Python, caption=User Entity Structure]
+User {
+    username: String (Primary Key)
+    password: String
+    role: String ("Admin" | "Customer")
+    cart: Array<CartItem>
+}
+
+CartItem {
+    product: Product
+    qty: Integer
+}
+\end{lstlisting}
+
+\section{Order Entity}
+\begin{lstlisting}[language=Python, caption=Order Entity Structure]
+Order {
+    order_id: Integer (Primary Key)
+    customer_name: String
+    items_txt: Array<String>
+    total: Float
+    address: String
+    pay_method: String
+    pay_status: String
+    date: DateTime
+}
+\end{lstlisting}
+
+\section{Relationships}
+\begin{itemize}
+    \item User has many CartItems
+    \item CartItem belongs to one Product
+    \item Order belongs to one User
+    \item Order contains many Products (via items\_txt)
+\end{itemize}
+
+% Chapter 10: Security Requirements
+\chapter{Security Requirements}
+
+\section{Authentication}
+\begin{itemize}
+    \item \textbf{Method:} Username/password
+    \item \textbf{Session:} Flask session management
+    \item \textbf{Timeout:} Session expires on browser close
+    \item \textbf{Password Policy:} None (for MVP)
+\end{itemize}
+
+\section{Authorization}
+\begin{itemize}
+    \item \textbf{Role-based:} Admin vs Customer
+    \item \textbf{Access Control:} Routes protected by role check
+    \item \textbf{Default Admin:} admin/123, place/123
+\end{itemize}
+
+\section{Data Protection}
+\begin{itemize}
+    \item \textbf{Input Validation:} All inputs validated
+    \item \textbf{SQL Injection:} N/A (no database)
+    \item \textbf{XSS Protection:} Template escaping (Flask default)
+    \item \textbf{CSRF:} Not implemented (should be added)
+\end{itemize}
+
+\section{Secrets Management}
+\begin{itemize}
+    \item \textbf{Secret Key:} Environment variable (SECRET\_KEY)
+    \item \textbf{Credentials:} Hardcoded for MVP (should be in database)
+\end{itemize}
+
+% Chapter 11: Performance Requirements
+\chapter{Performance Requirements}
+
+\section{Response Times}
+\begin{itemize}
+    \item \textbf{Page Load:} $< 2$ seconds
+    \item \textbf{API Response:} $< 500$ms
+    \item \textbf{Cart Update:} $< 300$ms
+    \item \textbf{Checkout:} $< 1$ second
+\end{itemize}
+
+\section{Throughput}
+\begin{itemize}
+    \item \textbf{Concurrent Users:} 50+ users
+    \item \textbf{Requests per Second:} 100+ requests
+    \item \textbf{Database Operations:} N/A (in-memory)
+\end{itemize}
+
+\section{Resource Usage}
+\begin{itemize}
+    \item \textbf{Memory:} $< 512$MB (Railway free tier)
+    \item \textbf{CPU:} Minimal (Python/Flask)
+    \item \textbf{Storage:} Minimal (no file uploads)
+\end{itemize}
+
+% Chapter 12: Testing Requirements
+\chapter{Testing Requirements}
+
+\section{Unit Testing}
+\begin{itemize}
+    \item \textbf{Coverage:} Business logic functions
+    \item \textbf{Tools:} pytest (recommended)
+    \item \textbf{Status:} Not implemented (manual testing)
+\end{itemize}
+
+\section{Integration Testing}
+\begin{itemize}
+    \item \textbf{Scope:} API endpoints, route handlers
+    \item \textbf{Status:} Manual testing
+\end{itemize}
+
+\section{System Testing}
+\begin{itemize}
+    \item \textbf{Scenarios:}
+    \begin{itemize}
+        \item User registration and login
+        \item Product browsing and cart
+        \item Order processing
+        \item Admin operations
+    \end{itemize}
+    \item \textbf{Status:} Manual testing performed
+\end{itemize}
+
+\section{User Acceptance Testing}
+\begin{itemize}
+    \item \textbf{Testers:} End users
+    \item \textbf{Scenarios:} All user stories
+    \item \textbf{Status:} Pending
+\end{itemize}
+
+% Chapter 13: Deployment Requirements
+\chapter{Deployment Requirements}
+
+\section{Deployment Platform}
+\begin{itemize}
+    \item \textbf{Platform:} Railway
+    \item \textbf{URL:} \url{https://railway.app}
+    \item \textbf{Build:} Automatic from GitHub
+    \item \textbf{Runtime:} Python 3.11
+\end{itemize}
+
+\section{Environment Variables}
+\begin{itemize}
+    \item \textbf{PORT:} Set automatically by Railway
+    \item \textbf{SECRET\_KEY:} Should be set in Railway dashboard
+\end{itemize}
+
+\section{Dependencies}
+\begin{itemize}
+    \item \textbf{Python:} 3.11+
+    \item \textbf{Packages:} See requirements.txt
+    \begin{itemize}
+        \item Flask==3.0.0
+        \item Werkzeug==3.0.1
+        \item gunicorn==21.2.0
+    \end{itemize}
+\end{itemize}
+
+\section{Build Process}
+\begin{enumerate}
+    \item Railway detects Python project
+    \item Installs dependencies from requirements.txt
+    \item Runs gunicorn with Procfile command
+    \item Application starts on assigned PORT
+\end{enumerate}
+
+\section{Domain Configuration}
+\begin{itemize}
+    \item \textbf{Default:} Railway provides subdomain
+    \item \textbf{Custom:} Can be configured in Railway settings
+\end{itemize}
+
+% Chapter 14: Appendices
+\chapter{Appendices}
+
+\section{Glossary}
+\begin{description}
+    \item[MVP] Minimum Viable Product
+    \item[RTL] Right-to-Left (text direction)
+    \item[WSGI] Web Server Gateway Interface
+    \item[COD] Cash on Delivery
+    \item[POS] Point of Sale
+\end{description}
+
+\section{Sample Data}
+The system comes with 30 pre-loaded products across categories:
+\begin{itemize}
+    \item Electronics (8 products)
+    \item Clothing (6 products)
+    \item Home (5 products)
+    \item Sports (4 products)
+    \item Books/Stationery (4 products)
+    \item Travel (2 products)
+\end{itemize}
+
+\section{API Endpoints}
+
+\subsection{GET Endpoints}
+\begin{itemize}
+    \item \texttt{/} - Home page
+    \item \texttt{/home} - Home page
+    \item \texttt{/login} - Login page
+    \item \texttt{/register} - Registration page
+    \item \texttt{/admin/dashboard} - Admin dashboard
+    \item \texttt{/customer/dashboard} - Customer dashboard
+    \item \texttt{/customer/products} - Product listing
+    \item \texttt{/customer/cart} - Shopping cart
+    \item \texttt{/customer/checkout} - Checkout page
+    \item \texttt{/api/product/<id>} - Get product info (JSON)
+\end{itemize}
+
+\subsection{POST Endpoints}
+\begin{itemize}
+    \item \texttt{/login} - Process login
+    \item \texttt{/register} - Process registration
+    \item \texttt{/admin/edit\_product} - Update product
+    \item \texttt{/admin/apply\_offer} - Apply offer
+    \item \texttt{/customer/add\_to\_cart} - Add item to cart
+    \item \texttt{/customer/remove\_from\_cart} - Remove item
+    \item \texttt{/customer/checkout} - Process order
+\end{itemize}
+
+\section{Error Codes}
+\begin{itemize}
+    \item \textbf{400:} Bad Request (invalid input)
+    \item \textbf{401:} Unauthorized (not logged in)
+    \item \textbf{403:} Forbidden (wrong role)
+    \item \textbf{404:} Not Found (product/user not found)
+    \item \textbf{500:} Internal Server Error
+\end{itemize}
+
+\section{Future Enhancements}
+\begin{enumerate}
+    \item Database integration (PostgreSQL)
+    \item User password hashing
+    \item Email notifications
+    \item Payment gateway integration
+    \item Product images
+    \item Search functionality
+    \item Product reviews
+    \item Wishlist feature
+    \item Order tracking
+    \item Admin analytics dashboard
+\end{enumerate}
+
+% Bibliography
+\begin{thebibliography}{9}
+    \bibitem{flask}
+    Flask Documentation.
+    \textit{Flask Framework}. 
+    \url{https://flask.palletsprojects.com/}
+    
+    \bibitem{python}
+    Python Software Foundation.
+    \textit{Python 3.11 Documentation}.
+    \url{https://docs.python.org/3.11/}
+    
+    \bibitem{railway}
+    Railway Inc.
+    \textit{Railway Deployment Guide}.
+    \url{https://docs.railway.app/}
+\end{thebibliography}
+
+% End of document
+\end{document}
+
